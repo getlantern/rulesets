@@ -103,6 +103,10 @@ func convertCSVToPlainRuleSet(inputPath string) (option.PlainRuleSet, error) {
 			continue
 		}
 
+		if len(record) != 2 {
+			return option.PlainRuleSet{}, fmt.Errorf("invalid record: %v", record)
+		}
+
 		ruleType := record[0]
 		switch ruleType {
 		case "domain":
