@@ -32,10 +32,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+    - uses: actions/checkout@v4
     - name: Download artifact
       uses: actions/download-artifact@v5
       with:
         name: csv_to_srs
+    - name: Set execute permission on csv_to_srs
+      run: chmod +x ./csv_to_srs
     - name: Generating SRS files
       run: ./csv_to_srs -input_dir ./csv -output_dir ./srs
     - name: Add, commit, and push
