@@ -24,7 +24,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, `
 Convert CSV rule files to SRS format.
-Each CSV file should have at least two columns and a mandatory header(which is skipped), where the first column determine the kind of rule (domain, domain_suffix, package_name, process_name, etc.) and the second column contains the corresponding value. e.g.:
+Each CSV file should have at least two columns and a mandatory header(which is skipped), where the first column determines the kind of rule (domain, domain_suffix, package_name, process_name, etc.) and the second column contains the corresponding value. e.g.:
 
 rule_type,value
 domain,example.com
