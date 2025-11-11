@@ -77,11 +77,14 @@ func convertCSVToPlainRuleSet(inputPath string) (option.PlainRuleSet, error) {
 			{
 				Type: constant.RuleTypeDefault,
 				DefaultOptions: option.DefaultHeadlessRule{
-					Domain:       badoption.Listable[string]{},
-					DomainSuffix: badoption.Listable[string]{},
-					PackageName:  badoption.Listable[string]{},
-					ProcessName:  badoption.Listable[string]{},
-					IPCIDR:       badoption.Listable[string]{},
+					Domain:           badoption.Listable[string]{},
+					DomainKeyword:    badoption.Listable[string]{},
+					DomainSuffix:     badoption.Listable[string]{},
+					PackageName:      badoption.Listable[string]{},
+					ProcessName:      badoption.Listable[string]{},
+					ProcessPath:      badoption.Listable[string]{},
+					ProcessPathRegex: badoption.Listable[string]{},
+					IPCIDR:           badoption.Listable[string]{},
 				},
 			},
 		},
@@ -113,10 +116,16 @@ func convertCSVToPlainRuleSet(inputPath string) (option.PlainRuleSet, error) {
 			ruleset.Rules[0].DefaultOptions.Domain = append(ruleset.Rules[0].DefaultOptions.Domain, record[1])
 		case "domain_suffix":
 			ruleset.Rules[0].DefaultOptions.DomainSuffix = append(ruleset.Rules[0].DefaultOptions.DomainSuffix, record[1])
+		case "domain_keyword":
+			ruleset.Rules[0].DefaultOptions.DomainKeyword = append(ruleset.Rules[0].DefaultOptions.DomainKeyword, record[1])
 		case "package_name":
 			ruleset.Rules[0].DefaultOptions.PackageName = append(ruleset.Rules[0].DefaultOptions.PackageName, record[1])
 		case "process_name":
 			ruleset.Rules[0].DefaultOptions.ProcessName = append(ruleset.Rules[0].DefaultOptions.ProcessName, record[1])
+		case "process_path":
+			ruleset.Rules[0].DefaultOptions.ProcessPath = append(ruleset.Rules[0].DefaultOptions.ProcessPath, record[1])
+		case "process_path_regex":
+			ruleset.Rules[0].DefaultOptions.ProcessPathRegex = append(ruleset.Rules[0].DefaultOptions.ProcessPathRegex, record[1])
 		case "ip_cidr":
 			ruleset.Rules[0].DefaultOptions.IPCIDR = append(ruleset.Rules[0].DefaultOptions.IPCIDR, record[1])
 		default:
