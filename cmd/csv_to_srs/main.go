@@ -28,7 +28,7 @@ Each CSV file should have at least two columns and a mandatory header(which is s
 
 rule_type,value
 domain,example.com
-domain-suffix,example.org
+domain_suffix,example.org
 
 `)
 		flag.PrintDefaults()
