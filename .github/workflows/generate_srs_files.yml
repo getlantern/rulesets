@@ -36,7 +36,7 @@ jobs:
       run: chmod +x ./csv_to_srs
     - name: Generating SRS files
       run: ./csv_to_srs -input_dir ./csv -output_dir ./srs
-    - uses: actions4git/seddtup-git@v1
+    - uses: actions4git/setup-git@v1
     - run: |
         git add ./srs
         if ! git diff --cached --quiet; then
