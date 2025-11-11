@@ -2,11 +2,8 @@ name: Generate SRS Files
 
 on:
   pull_request:
-    paths:
-      - 'csv/**'
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
