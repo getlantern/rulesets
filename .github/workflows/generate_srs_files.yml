@@ -1,10 +1,7 @@
 name: Generate SRS Files
 
 on:
-  schedule:
-    - cron:  "0 0 * * *"
-  push:
-    branches: [ "main" ]
+  pull_request:
     paths:
       - 'csv/**'
 
@@ -29,6 +26,7 @@ jobs:
 
 
   generate_srs:
+    if: startsWith(github.head_ref, 'main')
     runs-on: ubuntu-latest
     needs: build
     steps:
