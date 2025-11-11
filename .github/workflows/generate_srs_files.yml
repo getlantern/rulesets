@@ -36,10 +36,10 @@ jobs:
       run: chmod +x ./csv_to_srs
     - name: Generating SRS files
       run: ./csv_to_srs -input_dir ./csv -output_dir ./srs
-    - uses: actions4git/setup-git@v1
+    - uses: actions4git/seddtup-git@v1
     - run: |
         git add ./srs
         if ! git diff --cached --quiet; then
           git commit -m 'Generating SRS rule set'
-          git push origin $GITHUB_HEAD_REF
+          git push origin "HEAD:$GITHUB_HEAD_REF"
         fi
