@@ -7,7 +7,7 @@ Create a pull request that adds a CSV file to the `csv` directory (or edit one o
 - `{country}` is the [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code (e.g., `us` for the United States, `jp` for Japan). You can also set as `global` if this rule should be applied to all countries.
 - `{type}` could be anything that categorizes the rule set, such as `geo`, `adblock`, `ai`, `crypto`, etc.
 
-Each CSV file should contain a list of rules (for example, domains, domain suffixes, domain keywords, packages, process names, or process paths), one per line, with headers and without additional columns. For example:
+Each CSV file should contain a list of rules (for example, domains, domain suffixes, domain keywords, packages, process names, or process paths), one per line, with a single header row and no additional columns. The header is currently ignored by the tooling, but for consistency all new CSV files should use `rule_type,value` as the header. For example:
 ```csv
 rule_type,value
 domain,lantern.io
