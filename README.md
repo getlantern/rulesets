@@ -22,7 +22,7 @@ ip_cidr,192.0.2.0/24
 
 ## Generating sing-box rule set files
 
-After adding changes, commiting and creating a pull request, GitHub Actions will automatically generate the corresponding sing-box rule set files and place them in the `srs` directory. But you can also generate them locally by following these steps:
+After adding changes, committing and creating a pull request, GitHub Actions will automatically generate the corresponding sing-box rule set files and place them in the `srs` directory. But you can also generate them locally by following these steps:
 
 1. Make sure you have [Go](https://golang.org/dl/) installed on your machine.
 2. Clone this repository to your local machine.
