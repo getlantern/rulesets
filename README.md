@@ -16,6 +16,8 @@ domain_keyword,google
 package,com.example.app
 process_name,example.exe
 process_path,C:\Program Files\Example\example.exe
+process_path_regex,^C:\\\\Program Files\\\\Example\\\\.*
+ip_cidr,192.0.2.0/24
 ```
 
 ## Generating sing-box rule set files
