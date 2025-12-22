@@ -13,7 +13,7 @@ rule_type,value
 domain,lantern.io
 domain_suffix,example.org
 domain_keyword,google
-package,com.example.app
+package_name,com.example.app
 process_name,example.exe
 process_path,C:\Program Files\Example\example.exe
 process_path_regex,^C:\\\\Program Files\\\\Example\\\\.*
