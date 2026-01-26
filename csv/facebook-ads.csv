@@ -1,0 +1,4 @@
+rule type,value
+domain,analytics.facebook.com
+domain,facebookads.com
+domain,pixel.facebook.com
