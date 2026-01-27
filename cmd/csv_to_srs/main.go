@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/csv"
+	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"log/slog"
 	"os"
 	"path/filepath"
@@ -11,7 +14,7 @@ import (
 	"github.com/sagernet/sing-box/common/srs"
 	"github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
-	"github.com/sagernet/sing/common/json"
+	"github.com/sagernet/sing/common/json/badoption"
 )
 
 func main() {
@@ -63,41 +66,73 @@ domain_suffix,example.org
 }
 
 func convertCSVToPlainRuleSet(inputPath string) (option.PlainRuleSet, error) {
-	content, err := os.ReadFile(inputPath)
+	csvFile, err := os.Open(inputPath)
 	if err != nil {
-		return option.PlainRuleSet{}, err
+		return option.PlainRuleSet{}, fmt.Errorf("failed to open CSV file: %w", err)
 	}
-	jsonContent, err := csvToJson(content)
-	if err != nil {
-		return option.PlainRuleSet{}, err
+	defer csvFile.Close()
+
+	ruleset := option.PlainRuleSet{
+		Rules: []option.HeadlessRule{
+			{
+				Type: constant.RuleTypeDefault,
+				DefaultOptions: option.DefaultHeadlessRule{
+					Domain:           badoption.Listable[string]{},
+					DomainKeyword:    badoption.Listable[string]{},
+					DomainSuffix:     badoption.Listable[string]{},
+					PackageName:      badoption.Listable[string]{},
+					ProcessName:      badoption.Listable[string]{},
+					ProcessPath:      badoption.Listable[string]{},
+					ProcessPathRegex: badoption.Listable[string]{},
+					IPCIDR:           badoption.Listable[string]{},
+				},
+			},
+		},
 	}
-	ruleset, err := json.UnmarshalExtended[option.PlainRuleSet](jsonContent)
-	if err != nil {
-		return option.PlainRuleSet{}, err
+	r := csv.NewReader(csvFile)
+	i := 0
+	for {
+		record, err := r.Read()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+
+		if err != nil {
+			return option.PlainRuleSet{}, fmt.Errorf("failed to read record: %w", err)
+		}
+
+		if i == 0 {
+			i++
+			continue
+		}
+
+		if len(record) != 2 {
+			return option.PlainRuleSet{}, fmt.Errorf("invalid record: %v", record)
+		}
+
+		ruleType := record[0]
+		switch ruleType {
+		case "domain":
+			ruleset.Rules[0].DefaultOptions.Domain = append(ruleset.Rules[0].DefaultOptions.Domain, record[1])
+		case "domain_suffix":
+			ruleset.Rules[0].DefaultOptions.DomainSuffix = append(ruleset.Rules[0].DefaultOptions.DomainSuffix, record[1])
+		case "domain_keyword":
+			ruleset.Rules[0].DefaultOptions.DomainKeyword = append(ruleset.Rules[0].DefaultOptions.DomainKeyword, record[1])
+		case "domain_regex":
+			ruleset.Rules[0].DefaultOptions.DomainRegex = append(ruleset.Rules[0].DefaultOptions.DomainRegex, record[1])
+		case "package_name":
+			ruleset.Rules[0].DefaultOptions.PackageName = append(ruleset.Rules[0].DefaultOptions.PackageName, record[1])
+		case "process_name":
+			ruleset.Rules[0].DefaultOptions.ProcessName = append(ruleset.Rules[0].DefaultOptions.ProcessName, record[1])
+		case "process_path":
+			ruleset.Rules[0].DefaultOptions.ProcessPath = append(ruleset.Rules[0].DefaultOptions.ProcessPath, record[1])
+		case "process_path_regex":
+			ruleset.Rules[0].DefaultOptions.ProcessPathRegex = append(ruleset.Rules[0].DefaultOptions.ProcessPathRegex, record[1])
+		case "ip_cidr":
+			ruleset.Rules[0].DefaultOptions.IPCIDR = append(ruleset.Rules[0].DefaultOptions.IPCIDR, record[1])
+		default:
+			return option.PlainRuleSet{}, fmt.Errorf("unknown rule type: %s", ruleType)
+		}
 	}
 	return ruleset, nil
-}
-
-func csvToJson(csv []byte) ([]byte, error) {
-	tmpMap := make(map[string][]string)
-	lines := strings.Split(string(csv), "\n")
-	for i, line := range lines {
-		if i == 0 || line == "" {
-			continue
-		}
-		kv := strings.Split(line, ",")
-		if len(kv) != 2 {
-			slog.Warn("unexpected row", slog.String("line", line))
-			continue
-		}
-		if _, exist := tmpMap[kv[0]]; !exist {
-			tmpMap[kv[0]] = make([]string, 0)
-		}
-		tmpMap[kv[0]] = append(tmpMap[kv[0]], kv[1])
-	}
-	jsonMap, err := json.Marshal(tmpMap)
-	if err != nil {
-		return nil, err
-	}
-	return jsonMap, nil
 }
