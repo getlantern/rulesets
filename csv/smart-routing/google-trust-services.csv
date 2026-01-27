@@ -1,0 +1,6 @@
+rule type,value
+domain,pki.goog
+domain,publicca.googleapis.com
+domain,preprod-publicca.googleapis.com
+domain,clients1.google.com
+domain,pki.google.com

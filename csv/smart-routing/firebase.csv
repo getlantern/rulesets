@@ -1,0 +1,17 @@
+rule type,value
+domain,firebase.com
+domain,firebase.io
+domain,firebaseapp.com
+domain,firebaseio.com
+domain,firebase.google.com
+domain,firebase.googleapis.com
+domain,firebaseappcheck.googleapis.com
+domain,firebasedynamiclinks-ipv4.googleapis.com
+domain,firebasedynamiclinks-ipv6.googleapis.com
+domain,firebasedynamiclinks.googleapis.com
+domain,firebaseinappmessaging.googleapis.com
+domain,firebaseinstallations.googleapis.com
+domain,firebaselogging-pa.googleapis.com
+domain,firebaselogging.googleapis.com
+domain,firebaseperusertopics-pa.googleapis.com
+domain,firebaseremoteconfig.googleapis.com

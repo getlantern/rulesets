@@ -118,6 +118,8 @@ func convertCSVToPlainRuleSet(inputPath string) (option.PlainRuleSet, error) {
 			ruleset.Rules[0].DefaultOptions.DomainSuffix = append(ruleset.Rules[0].DefaultOptions.DomainSuffix, record[1])
 		case "domain_keyword":
 			ruleset.Rules[0].DefaultOptions.DomainKeyword = append(ruleset.Rules[0].DefaultOptions.DomainKeyword, record[1])
+		case "domain_regex":
+			ruleset.Rules[0].DefaultOptions.DomainRegex = append(ruleset.Rules[0].DefaultOptions.DomainRegex, record[1])
 		case "package_name":
 			ruleset.Rules[0].DefaultOptions.PackageName = append(ruleset.Rules[0].DefaultOptions.PackageName, record[1])
 		case "process_name":
