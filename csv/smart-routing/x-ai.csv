@@ -1,0 +1,4 @@
+rule type,value
+domain,grok.com
+domain,grok.x.com
+domain,x.ai

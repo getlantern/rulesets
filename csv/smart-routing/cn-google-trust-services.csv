@@ -1,0 +1,8 @@
+rule type,value
+domain,pki-goog.l.google.com
+domain,c.pki.goog
+domain,i.pki.goog
+domain,o.pki.goog
+domain,crl.pki.goog
+domain,crls.pki.goog
+domain,ocsp.pki.goog
