@@ -1,5 +1,5 @@
 rule type,value
-domain,kaggle.com
-domain,kaggle.io
-domain,kaggle.net
-domain,kaggleusercontent.com
+domain_suffix,kaggle.com
+domain_suffix,kaggle.io
+domain_suffix,kaggle.net
+domain_suffix,kaggleusercontent.com

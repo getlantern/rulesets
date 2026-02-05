@@ -1,5 +1,5 @@
 rule type,value
-domain,fbmessenger.com
-domain,m.me
-domain,messenger.com
-domain,nbabot.net
+domain_suffix,fbmessenger.com
+domain_suffix,m.me
+domain_suffix,messenger.com
+domain_suffix,nbabot.net

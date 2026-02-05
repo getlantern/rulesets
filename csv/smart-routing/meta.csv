@@ -1,4 +1,4 @@
 rule type,value
-domain,llama.com
-domain,meta.ai
-domain,meta.com
+domain_suffix,llama.com
+domain_suffix,meta.ai
+domain_suffix,meta.com

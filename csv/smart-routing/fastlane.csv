@@ -1,3 +1,3 @@
 rule type,value
-domain,fastlane.ci
-domain,fastlane.tools
+domain_suffix,fastlane.ci
+domain_suffix,fastlane.tools

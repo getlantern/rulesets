@@ -1,3 +1,3 @@
 rule type,value
-domain,threads.com
-domain,threads.net
+domain_suffix,threads.com
+domain_suffix,threads.net

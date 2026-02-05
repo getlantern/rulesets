@@ -1,4 +1,4 @@
 rule type,value
-domain,dart.dev
-domain,dartlang.org
-domain,dartpad.dev
+domain_suffix,dart.dev
+domain_suffix,dartlang.org
+domain_suffix,dartpad.dev
