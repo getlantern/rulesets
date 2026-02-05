@@ -1,4 +1,4 @@
 rule type,value
-domain,flutter.dev
-domain,flutterapp.com
-domain,pub.dev
+domain_suffix,flutter.dev
+domain_suffix,flutterapp.com
+domain_suffix,pub.dev

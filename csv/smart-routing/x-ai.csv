@@ -1,4 +1,4 @@
 rule type,value
-domain,grok.com
-domain,grok.x.com
-domain,x.ai
+domain_suffix,grok.com
+domain_suffix,grok.x.com
+domain_suffix,x.ai

@@ -1,2 +1,2 @@
 rule type,value
-domain,firebase-settings.crashlytics.com
+domain_suffix,firebase-settings.crashlytics.com

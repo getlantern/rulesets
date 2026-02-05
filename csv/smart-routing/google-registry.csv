@@ -1,14 +1,14 @@
 rule type,value
-domain,charlestonroadregistry.com
-domain,crr.com
-domain,registry.google
-domain,get.app
-domain,get.dev
-domain,get.how
-domain,get.new
-domain,get.page
-domain,get.rsvp
-domain,hey.boo
-domain,iam.soy
-domain,new.day
-domain,xn--p8j9a0d9c9a.xn--q9jyb4c
+domain_suffix,charlestonroadregistry.com
+domain_suffix,crr.com
+domain_suffix,registry.google
+domain_suffix,get.app
+domain_suffix,get.dev
+domain_suffix,get.how
+domain_suffix,get.new
+domain_suffix,get.page
+domain_suffix,get.rsvp
+domain_suffix,hey.boo
+domain_suffix,iam.soy
+domain_suffix,new.day
+domain_suffix,xn--p8j9a0d9c9a.xn--q9jyb4c

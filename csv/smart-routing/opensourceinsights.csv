@@ -1,5 +1,5 @@
 rule type,value
-domain,deps.dev
-domain,deps.info
-domain,opensourceinsight.dev
-domain,opensourceinsights.dev
+domain_suffix,deps.dev
+domain_suffix,deps.info
+domain_suffix,opensourceinsight.dev
+domain_suffix,opensourceinsights.dev

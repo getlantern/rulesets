@@ -1,8 +1,8 @@
 rule type,value
-domain,pki-goog.l.google.com
-domain,c.pki.goog
-domain,i.pki.goog
-domain,o.pki.goog
-domain,crl.pki.goog
-domain,crls.pki.goog
-domain,ocsp.pki.goog
+domain_suffix,pki-goog.l.google.com
+domain_suffix,c.pki.goog
+domain_suffix,i.pki.goog
+domain_suffix,o.pki.goog
+domain_suffix,crl.pki.goog
+domain_suffix,crls.pki.goog
+domain_suffix,ocsp.pki.goog
