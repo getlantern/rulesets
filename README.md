@@ -34,3 +34,7 @@ go run ./cmd/csv_to_srs/main.go -input_dir ./csv -output_dir ./srs
 ```
 
 This command will read all CSV files from the `csv` directory and generate the corresponding sing-box rule set files in the `srs` directory.
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
