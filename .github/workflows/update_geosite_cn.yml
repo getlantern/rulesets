@@ -1,0 +1,112 @@
+name: Update geosite-cn
+
+on:
+  schedule:
+    - cron: "20 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# This job commits to the default branch, so never let two runs race.
+concurrency:
+  group: update-geosite-cn
+  cancel-in-progress: false
+
+env:
+  UPSTREAM_URL: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs
+  # Kept in sync with the sing-box version in go.mod so decompiling and
+  # recompiling happen with the same rule set format. SagerNet publishes no
+  # checksum or signature assets, so the digest below is pinned by hand and has
+  # to be updated together with SING_BOX_VERSION.
+  SING_BOX_VERSION: 1.12.12
+  SING_BOX_SHA256: 7c103cb2f9a7dc54cb82962043596718ed27989a478d6405f0939a9b775f889f
+  CSV_PATH: csv/smart-routing/geosite-cn.csv
+  # Guards against committing a truncated or malformed upstream list. Upstream
+  # currently ships ~112k suffixes.
+  MIN_RULES: 50000
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Downloading and running sing-box, and decompiling untrusted upstream
+      # data, both happen before checkout so the repository write token isn't
+      # present in the workspace while third-party code executes.
+      - name: Install sing-box
+        run: |
+          set -euo pipefail
+          archive="sing-box-${SING_BOX_VERSION}-linux-amd64"
+          cd "$RUNNER_TEMP"
+          curl -fsSL -o sing-box.tar.gz \
+            "https://github.com/SagerNet/sing-box/releases/download/v${SING_BOX_VERSION}/${archive}.tar.gz"
+          echo "${SING_BOX_SHA256}  sing-box.tar.gz" | sha256sum -c -
+          tar -xzf sing-box.tar.gz
+          sudo install "${archive}/sing-box" /usr/local/bin/sing-box
+          sing-box version
+
+      - name: Fetch and decompile upstream rule set
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl -fsSL -o cn.srs "$UPSTREAM_URL"
+          sing-box rule-set decompile cn.srs
+          ls -l cn.srs cn.json
+
+      - uses: actions/checkout@v5
+
+      - name: Rewrite CSV
+        run: |
+          set -euo pipefail
+          json="$RUNNER_TEMP/cn.json"
+
+          # csv_to_srs only understands a fixed set of rule types, so refuse to
+          # run rather than silently drop rules if upstream starts shipping
+          # something other than domain suffixes.
+          unexpected="$(jq -r '[.rules[] | keys[]] | unique | map(select(. != "domain_suffix")) | join(", ")' "$json")"
+          if [ -n "$unexpected" ]; then
+            echo "::error::upstream rule set contains unhandled fields: ${unexpected}"
+            exit 1
+          fi
+
+          # The bare "cn" suffix routes every .cn request directly, which breaks
+          # hosts such as googleapis.cn, so it stays out of this rule set (#11).
+          jq -r '[.rules[].domain_suffix[]] | unique | .[]
+                 | select(. != "cn")
+                 | "domain_suffix," + .' "$json" > "$RUNNER_TEMP/rules.csv"
+
+          count="$(grep -c '' "$RUNNER_TEMP/rules.csv")"
+          if [ "$count" -lt "$MIN_RULES" ]; then
+            echo "::error::only ${count} rules decompiled, expected at least ${MIN_RULES}"
+            exit 1
+          fi
+
+          { echo "rule type,value"; cat "$RUNNER_TEMP/rules.csv"; } > "$CSV_PATH"
+          echo "RULE_COUNT=${count}" >> "$GITHUB_ENV"
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: '1.25'
+
+      - name: Generating SRS files
+        run: go run ./cmd/csv_to_srs -input_dir ./csv -output_dir ./srs
+
+      # Pinned to the v7.2.0 commit: this step holds contents: write, so the ref
+      # must be immutable.
+      - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
+        id: commit
+        with:
+          commit_message: "chore: update geosite-cn rule set from upstream"
+          file_pattern: csv/smart-routing/geosite-cn.csv srs/geosite-cn.srs
+
+      - name: Summary
+        run: |
+          {
+            echo "### geosite-cn"
+            echo
+            echo "- rules: ${RULE_COUNT}"
+            echo "- changed: ${{ steps.commit.outputs.changes_detected }}"
+            echo "- commit: ${{ steps.commit.outputs.commit_hash || '—' }}"
+          } >> "$GITHUB_STEP_SUMMARY"
